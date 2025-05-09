@@ -11,10 +11,12 @@ const TodoApp = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [newTodo, setNewTodo] = useState('');
     const [editId, setEditId] = useState<string | null>(null);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         const stored = localStorage.getItem('todos');
         stored && setTodos(JSON.parse(stored));
+        setIsMounted(true);
     }, []);
 
     useEffect(() => {
@@ -48,7 +50,7 @@ const TodoApp = () => {
             handleSubmit();
         }
     };
-    
+
 
     const handleEdit = (id: string) => {
         const task = todos.find(t => t.id === id);
@@ -57,12 +59,13 @@ const TodoApp = () => {
             setEditId(id);
         }
     };
-
+    if (!isMounted) return null;
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 flex items-center justify-center p-6">
-            <div className="w-full max-w-1/2 bg-white shadow-lg rounded-xl p-6">
-                <h1 className="text-3xl font-bold text-blue-700 text-center mb-6">📝 Todo App</h1>
-                <div className="flex gap-2 mb-6">
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 flex items-center justify-center p-4 sm:p-6">
+            <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl bg-white shadow-lg rounded-xl p-4 sm:p-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 text-center mb-4 sm:mb-6">📝 Todo App</h1>
+
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 mb-4 sm:mb-6">
                     <InputBox
                         placeholder={editId ? 'Edit task...' : 'Add a new task...'}
                         value={newTodo}
@@ -72,14 +75,16 @@ const TodoApp = () => {
                     />
                     <Button
                         onClick={handleSubmit}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                        className="w-full sm:w-auto text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
                     >
                         {editId ? 'Update' : 'Add'}
                     </Button>
                 </div>
+
                 <TaskLists todos={todos} onRemove={handleRemove} onEditStart={handleEdit} />
             </div>
         </div>
+
     );
 };
 
