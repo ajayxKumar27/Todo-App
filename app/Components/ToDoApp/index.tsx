@@ -5,7 +5,7 @@ import InputBox from '../Common/InputBox';
 import Button from '../Common/Button';
 import TaskLists from './TaskLists';
 
-type Todo = { id: string; text: string };
+type Todo = { id: string; text: string; isMarked?: boolean };
 
 const TodoApp = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,7 +31,7 @@ const TodoApp = () => {
             setTodos(todos.map(todo => todo.id === editId ? { ...todo, text: trimmed } : todo));
             setEditId(null);
         } else {
-            setTodos([...todos, { id: uuidv4(), text: trimmed }]);
+            setTodos([...todos, { id: uuidv4(), text: trimmed, isMarked: false }]);
         }
 
         setNewTodo('');
@@ -59,11 +59,21 @@ const TodoApp = () => {
             setEditId(id);
         }
     };
+
+    const handleToggleCompleted = (id: string) => {
+        setTodos(prev =>
+            prev.map(todo =>
+                todo.id === id ? { ...todo, isMarked: !todo.isMarked } : todo
+            )
+        );
+    };
+
     if (!isMounted) return null;
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 flex items-center justify-center p-4 sm:p-6">
-            <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl bg-white shadow-lg rounded-xl p-4 sm:p-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 text-center mb-4 sm:mb-6">📝 Todo App</h1>
+        <div className="h-screen bg-gradient-to-br from-gray-100 to-blue-200 flex items-center justify-center p-4 sm:p-6">
+            <div className="w-full max-w-md sm:max-w-lg max-h-dvh md:max-w-2xl bg-white shadow-lg rounded-xl p-4 sm:p-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 text-center mb-4 sm:mb-6"> Todo App</h1>
 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 mb-4 sm:mb-6">
                     <InputBox
@@ -81,7 +91,12 @@ const TodoApp = () => {
                     </Button>
                 </div>
 
-                <TaskLists todos={todos} onRemove={handleRemove} onEditStart={handleEdit} />
+                <TaskLists
+                    todos={todos}
+                    onRemove={handleRemove}
+                    onEditStart={handleEdit}
+                    isCompletedToggle={handleToggleCompleted}
+                />
             </div>
         </div>
 
