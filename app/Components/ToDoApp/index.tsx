@@ -60,7 +60,7 @@ const TodoApp = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 flex items-center justify-center p-6">
-            <div className="w-full max-w-xl bg-white shadow-lg rounded-xl p-6">
+            <div className="w-full max-w-1/2 bg-white shadow-lg rounded-xl p-6">
                 <h1 className="text-3xl font-bold text-blue-700 text-center mb-6">📝 Todo App</h1>
                 <div className="flex gap-2 mb-6">
                     <InputBox
