@@ -26,6 +26,7 @@ const TaskLists: React.FC<Props> = ({ todos, onRemove, onEditStart, isCompletedT
                     <span
                         className={`mr-2.5 cursor-pointer ${isMarked ? 'text-green-600' : 'text-primary'}`}
                         onClick={() => isCompletedToggle(id)}
+                        title={isMarked ? 'Remove highlight' : 'Highlight this task'}
                     >
                         <svg
                             width={20}
